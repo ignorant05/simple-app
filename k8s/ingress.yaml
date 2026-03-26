@@ -15,10 +15,3 @@ spec:
                 name: simple-app-service
                 port:
                   number: 80
-          - path: /health
-            pathType: Prefix
-            backend:
-              service:
-                name: simple-app-service
-                port:
-                  number: 80
