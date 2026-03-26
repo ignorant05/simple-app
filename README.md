@@ -13,7 +13,6 @@ GitHub Push → GitHub Actions → Build & Test → Push to ECR → Deploy to EK
 - Docker **v29.3.0** (both client and server)
 - Docker-compose **v5.1.0**
 - Kubernetes (kubectl **v1.35.1**, Kustomize **v5.7.1**)
-- AWS Services: VPC/ ECR/ EKS /EC2 /IAM 
 - minikube **v1.38.1** (for local dev/test)
 
 ## Project Tree 
@@ -45,12 +44,12 @@ minikube start --cpus 4 --memory 4096
 eval $(minikube docker-env)
 
 # Note: if you encounter a docker issue, it's mostly because: 
-    - docker.service isn't running, then just restart it
-    - docker cannot authenticate you, then just use `docker logout`, `docker login` to reauthenticate
+#   - docker.service isn\'t running, then just restart it
+#   - docker cannot authenticate you, then just use `docker logout`, `docker login` to reauthenticate
 
 # building docker image 
-# Note: if the image name is changed in the future in the deployment's template section, then you must change it too
-#       if it is dynamic (with sed, which i plan to do) i'll make the necessary changes in this documentation
+# Note: if the image name is changed in the future in the deployment\'s template section, then you must change it too
+#       if it is dynamic (with sed, which i plan to do) i\'ll make the necessary changes in this documentation
 docker build -t simple-app:test . (for testing)
 
 # loading image to minikube cluster
@@ -64,7 +63,7 @@ kubectl apply -f k8s/
 
 # Watch for errors via **describe/get/logs** subcommands
 
-# if no errors found, then use your webclient or browser (because it's a fastApi app) to test it
+# if no errors found, then use your webclient or browser (because it\'s a fastApi app) to test it
 
 # 1st method
 # tunnel via minikube (straight forward)
