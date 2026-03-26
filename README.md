@@ -14,6 +14,7 @@ GitHub Push → GitHub Actions → Build & Test → Push to ECR → Deploy to EK
 - Docker-compose **v5.1.0**
 - Kubernetes (kubectl **v1.35.1**, Kustomize **v5.7.1**)
 - minikube **v1.38.1** (for local dev/test)
+- AWS Services: VPC/ ECR/ EKS /EC2 /IAM 
 
 ## Project Tree 
 ```bash.
@@ -21,6 +22,9 @@ simple-app
 ├── app
 │   ├── main.py
 │   └── requirements.txt
+│   └── tests
+│       ├── __init__.py
+│       ├── main_test.py
 ├── docker-compose.dev.yaml
 ├── docker-compose.yaml
 ├── Dockerfile
@@ -31,6 +35,11 @@ simple-app
 │   ├── resourceQuota.yaml
 │   └── service.yaml
 ├── README.md
+└── terraform
+    ├── helm.tf
+    ├── main.tf
+    ├── outputs.tf
+    └── variables.tf
 ```
 
 ## Installation & Setup 
@@ -38,6 +47,16 @@ simple-app
 # Clone and move into the simple-app dir
 git clone https://github.com/ignorant05/simple-app 
 cd simple-app
+
+# AWS credentials
+# export the creds into your env file (eg. .zshrc or .bashrc files)
+export AWS_ACCESS_KEY_ID="<your-iam-access-key-id>"
+export AWS_SECRET_ACCESS_KEY="<your-iam-secret-access-key>"
+
+# Note: the IAM user needs the following policies:
+#       - `AmazonEKSClusterPolicy`
+#       - `AmazonEC2ContainerRegistryFullAccess`
+#       - `AmazonEKSWorkerNodePolicy`
 
 # setup minkube cluster with custom cpu/ram
 minikube start --cpus 4 --memory 4096 
@@ -56,7 +75,7 @@ docker build -t simple-app:test . (for testing)
 minikube image load simple-app:test 
 
 # create a namespace 
-kubectl create ns simple-app-ns
+kubectl get ns simple-app-ns || kubectl create ns simple-app-ns
 
 # apply changes to manifests with kubectl
 kubectl apply -f k8s/
@@ -79,4 +98,9 @@ kubectl get svc -n simple-app-ns
 # port forwarding via kubectl
 # i used port 8080 here but you can use any port that is not mapped to any external service on you local machine
 kubectl port-forward -n simple-app-ns svc/simple-app-service 8080:80
+
+# use "localhost:8080" to access the endpoints
+# try the "/" and "/health" endpoints
+# if you get messages in json format then you're good to go
 ```
+
