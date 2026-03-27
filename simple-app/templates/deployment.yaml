@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "simple-app.fullname" . }}
+  namespace: {{ .Values.namespace.global }} 
+  labels:
+    {{- include "simple-app.selectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "simple-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "simple-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: simple-app
+          imagePullPolicy: {{ .Values.container.image.policies.imagePullPolicy }}
+          {{/* image: simple-app:test  */}}
+          image: IMAGE_PLACEHOLDER 
+          ports:
+            - containerPort: {{ .Values.container.containerPort }} 
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "16Mi"
+            limits:
+              cpu: "300m"
+              memory: "32Mi"
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbe.httpGet.path }}
+              port: {{ .Values.readinessProbe.httpGet.port }} 
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbe.httpGet.path }}
+              port: {{ .Values.livenessProbe.httpGet.port }} 
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-app-service
+  namespace: {{ .Values.namespace.global }} 
+spec:
+  selector:
+    {{- include "simple-app.selectorLabels" . | nindent 4 }}
+  ports:
+    - protocol: {{ .Values.service.ports.protocol }}
+      port: {{ .Values.service.ports.port }}
+      targetPort: {{ .Values.service.ports.targetPort }} 
+  type: {{ .Values.service.type }} 

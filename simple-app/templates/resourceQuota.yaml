@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: pods-medium
+  namespace: {{ .Values.namespace.global }} 
+spec:
+  hard:
+    pods: {{ .Values.namespace.reqourceQuota.hard.pods }} 
+    memory: {{ .Values.namespace.reqourceQuota.hard.memory }}
+    cpu: {{ .Values.namespace.reqourceQuota.hard.cpu }}
