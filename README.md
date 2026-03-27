@@ -14,14 +14,19 @@ GitHub Push → GitHub Actions → Build & Test → Push to ECR → Deploy to EK
 - Docker-compose **v5.1.0**
 - Kubernetes (kubectl **v1.35.1**, Kustomize **v5.7.1**)
 - minikube **v1.38.1** (for local dev/test)
+- Act **v0.2.82** (for local ci/cd pipeline testing)
 - AWS Services: VPC/ ECR/ EKS /EC2 /IAM 
 
 ## Project Tree 
 ```bash.
 simple-app
+├── .github
+│   └── workflows
+│       ├── cd.yaml
+│       └── ci.yaml
 ├── app
 │   ├── main.py
-│   └── requirements.txt
+│   ├── requirements.txt
 │   └── tests
 │       ├── __init__.py
 │       ├── main_test.py
@@ -42,7 +47,7 @@ simple-app
     └── variables.tf
 ```
 
-## Installation & Setup 
+## Installation & Local Setup 
 ```bash 
 # Clone and move into the simple-app dir
 git clone https://github.com/ignorant05/simple-app 

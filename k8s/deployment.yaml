@@ -18,7 +18,7 @@ spec:
       containers:
         - name: simple-app
           imagePullPolicy: Never
-          image: simple-app:test
+          image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 8000
           resources:
