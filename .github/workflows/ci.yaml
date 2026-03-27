@@ -67,3 +67,29 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high
+
+  summary-notif:
+    needs: [build, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord Notify
+        if: Always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          STATUS=${{ job.status }}
+          COLOR=$([[ "$STATUS" == "success" ]] && echo "3066993" || echo "15158332")
+              curl -X POST "$DISCORD_WEBHOOK_URL" \
+                -H "Content-Type: application/json" \
+                -d '{
+                  "embeds": [{
+                    "title": "CD Pipeline — '"$STATUS"'",
+                    "color": '"$COLOR"',
+                    "fields": [
+                      { "name": "Repo", "value": "${{ github.repository }}", "inline": true },
+                      { "name": "Branch", "value": "${{ github.ref_name }}", "inline": true },
+                      { "name": "Image Tag", "value": "${{ github.sha }}", "inline": false },
+                      { "name": "Environment", "value": "EKS", "inline": true }
+                    ]
+                  }]
+                }'
