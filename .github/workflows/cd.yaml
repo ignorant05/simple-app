@@ -48,6 +48,14 @@ jobs:
                      $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
+      - name: Run Snyk to check Docker images for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ steps.login-ecr.outputs.registry }}/simple-app:${{ github.sha }}
+          args: --severity-threshold=high
+
   deploy-to-eks:
     needs: build-and-push
     runs-on: ubuntu-latest
