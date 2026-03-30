@@ -1,11 +1,11 @@
 variable "region" {
-   default = "us-east-1"
+  default = "us-east-1"
 }
 
 variable "cluster_name" {
-   default = "simple-app-cluster"
+  default = "simple-app-cluster"
 }
 
 variable "instance_type" {
-   default = "t2.micro"
+  default = "t2.micro"
 }
