@@ -1,8 +1,8 @@
 provider "helm" {
   kubernetes = {
-    host = aws_eks_cluster.main.endpoint
+    host = module.eks.host
     cluster_ca_certificate = base64decode(
-      aws_eks_cluster.main.certificate_authority[0].data
+      module.eks.cluster_certificate_authority
     )
     exec = {
       api_version = "client.authentication.k8s.io/v1beta1"
@@ -11,6 +11,7 @@ provider "helm" {
     }
   }
 }
+
 
 resource "helm_release" "ingress_nginx" {
   name             = "ingress-nginx"
