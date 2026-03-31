@@ -7,7 +7,10 @@ resource "aws_eks_node_group" "workers" {
     var.instance_type
   ]
 
-  subnet_ids = var.subnet_ids
+  subnet_ids = [
+    var.public_subnet_a_id,
+    var.public_subnet_b_id
+  ]
 
   scaling_config {
     desired_size = 2

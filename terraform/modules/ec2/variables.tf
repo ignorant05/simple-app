@@ -4,6 +4,8 @@ variable "node_role_arn" {}
 
 variable "instance_type" {}
 
-variable "subnet_ids" {}
+variable "public_subnet_a_id" {}
+
+variable "public_subnet_b_id" {}
 
 variable "policies" {}
