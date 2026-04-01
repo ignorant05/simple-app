@@ -5,12 +5,14 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".*.md"
+      - "**.md"
+      - "**.MD"
   pull_request:
     branches:
       - main
     paths-ignore:
-      - ".*.md"
+      - "**.md"
+      - "**.MD"
 
 permissions:
   id-token: write

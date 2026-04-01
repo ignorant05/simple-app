@@ -5,12 +5,14 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".*.md"
+      - "**.md"
+      - "**.MD"
   push:
     branches:
       - main
     paths-ignore:
-      - ".*.md"
+      - "**.md"
+      - "**.MD"
 
 jobs:
   build:
