@@ -77,8 +77,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: github-actions-deploy
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Update kubeconfig
@@ -91,7 +91,7 @@ jobs:
         run: |
           sed -i "s|IMAGE_PLACEHOLDER|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" simple-app/templates/deployment.yaml
           kubectl get ns $NAMESPACE || kubectl create ns $NAMESPACE
-          kubectl apply -f k8s/
+          helm upgrade --install simple-app ./simple-app --namespace $NAMESPACE --set image.tag=$IMAGE_TAG
           kubectl rollout status deployment/$ECR_REPOSITORY -n $NAMESPACE
 
   summary-notif:

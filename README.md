@@ -8,6 +8,12 @@ A simple python fastApi app (serves as a placeholder for real app) used to demon
 GitHub Push → GitHub Actions → Build & Test → Push to ECR → Deploy to EKS → Live App
 ```
 
+## Diagram 
+![diagram image](diagram/diagram.png)
+
+You can check the code here
+[diagram code](images/diagram-code.txt)
+
 ## Stack Breakdown 
 - python **v3.14.3**
 - Docker **v29.3.0** (both client and server)

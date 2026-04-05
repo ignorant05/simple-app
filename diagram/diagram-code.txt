@@ -1,0 +1,67 @@
+direction: down
+
+Internet [icon: globe]
+VPC [icon: aws-vpc, color: teal]{
+  publicSubnetA[icon: aws-subnet, label: "public subnet a\n10.0.1.0/24\nus-east-1a"]
+
+  publicSubnetB[icon: aws-subnet, label: "public subnet b\n10.0.2.0/24\nus-east-1b"]
+
+  RouteTable[icon: aws-route-table, label: "route table\n0.0.0.0/0"]
+
+  IGW [icon: aws-internet-gateway, label:"internet gateway"]
+
+
+  EKSCluster [icon: aws-eks, label: "eks cluster\nsimple-app-cluster"]{
+    NodeGroup [icon: aws-ec2, label:"node group\nt3.micro . min1/des2/max3"]
+
+    IngresssNignx [icon: kubernetes,label: "ingress-nginx\nhelm release . LoadBalancer"]
+    
+    AppPod [icon: docker, label: "fastapi pod\nhelm chart -> simple-app"]
+  }
+}
+
+IAMGroup [label: "IAM", color: amber] {
+  EKSRole [icon: aws-iam-role, label: "eks role\nAmazonEKSClusterPolicy"]
+  NodeRole [icon: aws-iam-role, label: "node role\nWorkerNode . CNI . ECR"]
+  GHARole [icon: aws-iam-role, label: "github actions role\nOIDC . no stored keys"]
+}
+
+ECR [icon: aws-ecr, label: "ecr repository\nsimple-app image"]
+
+GitHub [icon: gihub, color: gray]{
+  CI [icon: github-actions, label: "ci.yaml\ntest -> build"]
+  CD [icon: github-actions, label: "cd.yaml\nhelm upgrade -> eks"]
+}
+
+Internet -> IGW [label: "inbound traffic"]: [textSize: large, color: red]
+IGW -> RouteTable
+RouteTable -> publicSubnetA 
+RouteTable -> publicSubnetB 
+publicSubnetA -> EKSCluster: [textSize: large, color: "#32dcd9"]
+publicSubnetB -> EKSCluster: [color: "#23ecbf"]
+IngresssNignx -> AppPod [label: "Route"]
+
+NodeGroup -> IngresssNignx 
+EKSRole -> EKSCluster [label: "assume role"]: [textSize: medium, color: green]
+NodeRole -> NodeGroup [label: "assume role"]: [textSize: medium, color: green]
+GHARole -> ECR [label: "push image"]: [textSize: medium, color: blue]
+GHARole -> EKSCluster [label: "helm deploy"]: [textSize: medium, color: blue]
+CD -> ECR [label :"docker build & push"]: [color: "#fdc660", textSize: medium]
+CD -> EKSCluster [label: "helm upgrade"]: [textSize: medium, color: "#e88138"]
+ECR -> NodeGroup [label: "pull image"]: [textSize: medium, color: "#763ae8"]
+CD -> GHARole [label: "oidc auth"]: [textSize: medium, color: blue]
+CD -> Discord    [label: "notify"]  : [textSize: large, color: red] 
+CI -> Discord : [textSize: medium, color: red]
+Discord -> Developer Device [icon: device]: [textSize: medium, color: red]
+Policies {
+  NodePolicy 
+  EKSPolicy 
+  CNIPolicy
+  ECRPolicy
+}
+
+NodeRole -> NodePolicy: [textSize: medium, color: green]
+NodeRole -> CNIPolicy: [textSize: medium, color: green]
+NodeRole -> ECRPolicy: [color: green, textSize: medium]
+EKSRole -> EKSPolicy: [textSize: large, color: purple]
+
