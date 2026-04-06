@@ -3,6 +3,7 @@ resource "aws_eks_cluster" "main" {
   role_arn = var.role_arn
 
   vpc_config {
+    endpoint_public_access = false
     subnet_ids = [
       var.public_subnet_a_id,
       var.public_subnet_b_id
