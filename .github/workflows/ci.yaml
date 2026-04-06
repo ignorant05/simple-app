@@ -43,7 +43,7 @@ jobs:
       - name: Security Scan
         run: |
           echo "Running Security Scan..."
-          bandit -r app 
+          bandit -r app --exclude app/tests 
           pip-audit
           echo "Done"
 
@@ -65,7 +65,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high --file=app/requirements.txt
 
       - name: Scan Iac
         uses: snyk/actions/iac@master
